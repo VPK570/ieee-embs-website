@@ -1,4 +1,4 @@
-import BeamsBackground from "@/components/ui/BeamsBackground"; // The v0 component
+import BeamsBackground from "@/components/ui/BeamsBackground";
 import Hero from "@/components/about-us/Hero";
 import AboutSection from "@/components/about-us/AboutSection";
 import EventsRolodex from "@/components/events/EventsRolodex";
