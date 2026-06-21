@@ -332,7 +332,7 @@ export default function AnimatedCardStack() {
     <div className="flex w-auto flex-col items-center justify-center pt-2">
       <div className="relative z-10 text-center">
           <h1
-            className="text-6xl font-light tracking-wide text-white mb-2"
+            className="text-6xl font-semibold font-serif tracking-wide text-white mb-2"
             style={{ textShadow: "0 0 24px rgba(69,190,214,0.28)" }}
           >
             BLOGS

@@ -18,7 +18,7 @@ export default function AboutSection() {
       <div className="flex flex-col items-center justify-center px-6 text-center mx-auto">
         <div className="relative z-10 text-center mb-2">
           <h1
-            className="text-6xl font-light tracking-wide text-white mb-2"
+            className="text-6xl font-semibold font-serif tracking-wide text-white mb-2"
             style={{ textShadow: "0 0 24px rgba(69,190,214,0.28)" }}
           >
             ABOUT US

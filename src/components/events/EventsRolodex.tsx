@@ -130,7 +130,7 @@ const events = [
     title: "CrisisX",
     image: "/events/crisisx2023.jpeg",
     description: 
-    "An immersive emergency-response challenge where participants tackled critical healthcare scenarios, explored the role of technology in patient care, and developed decision-making skills under pressure."
+    "An immersive emergency-response challenge where participants tackled critical healthcare scenarios with technology and developed decision-making skills under pressure."
 
   },
 ]
@@ -147,21 +147,45 @@ export default function EventsRolodex() {
   const rotateYActive = useTransform(mouseX, (v) => v * 0.3)
   const rotateXActive = useTransform(mouseY, (v) => -2 - v)
  
+// Replace your existing wheel useEffect with this:
+
+// This ref stores leftover scroll that hasn't triggered an event change yet.
+// It's a ref (not state) because changing it shouldn't cause a re-render.
+  const scrollAccumulator = useRef(0)
+
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (containerRef.current?.contains(e.target as Node)) {
-        e.preventDefault()
-        if (isAnimating.current) return
-        isAnimating.current = true
-        setActive((prev) => (e.deltaY > 0 ? Math.min(prev + 1, events.length - 1) : Math.max(prev - 1, 0)))
-        timeoutRef.current = setTimeout(() => { isAnimating.current = false }, 900)
-      }
+      if (!containerRef.current?.contains(e.target as Node)) return
+      e.preventDefault()
+
+      // Add this scroll's delta to the accumulator.
+      // deltaY is negative when scrolling up, positive when scrolling down.
+      scrollAccumulator.current += e.deltaY
+
+      // The threshold is how much scrolling = one event step.
+      // 150 feels natural — tune this up (more effort) or down (more sensitive).
+      const THRESHOLD = 150
+
+      // How many events should we jump? Could be 0, 1, 2, etc.
+      // Math.trunc cuts off the decimal — we only want whole event steps.
+      const steps = Math.trunc(scrollAccumulator.current / THRESHOLD)
+
+      if (steps === 0) return // haven't accumulated enough yet, do nothing
+
+      // Consume exactly the scroll that produced those steps.
+      // The remainder stays in the accumulator for the next event.
+      scrollAccumulator.current -= steps * THRESHOLD
+
+      setActive((prev) => {
+        const next = prev + steps
+        // Clamp to valid range so it can't go below 0 or above the last event
+        return Math.max(0, Math.min(events.length - 1, next))
+      })
     }
- 
+
     window.addEventListener("wheel", handleWheel, { passive: false })
     return () => {
       window.removeEventListener("wheel", handleWheel)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
   }, [])
  

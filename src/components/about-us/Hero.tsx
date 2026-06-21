@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { analyseComplexValue, animate, motion } from "framer-motion";
 import { LucideRepeat, Repeat, Repeat1 } from "lucide-react";
+import HeroSlideshow from "../ui/slideshow";
 
 export default function Hero() {
   return (
@@ -43,7 +44,8 @@ export default function Hero() {
       >
 
         <div className="flex-1 flex justify-center items-center">
-          <svg viewBox="0 0 185 80" className="w-96">
+          <HeroSlideshow/>
+          {/*<svg viewBox="0 0 185 80" className="w-96">
             <path
               d="M 0 40 
          C 10 40, 15 35, 20 40 
@@ -72,7 +74,7 @@ export default function Hero() {
             @keyframes draw {
               to { stroke-dashoffset: 0; }
             }
-          `}</style>
+          `}</style> */}
         </div>
 
       </motion.div>

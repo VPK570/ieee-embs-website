@@ -1,10 +1,5 @@
 "use client";
 
-// CHANGE 1: Single consolidated framer-motion import.
-// Original had LazyMotion/domAnimation imported but then used 8+ separate
-// <LazyMotion> wrappers inside a single component — each one redundantly
-// re-registers the animation bundle. All removed below; one wrapper at the
-// BoardGrid root handles everything.
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform, LazyMotion, domAnimation } from "framer-motion";
 
@@ -13,13 +8,17 @@ interface BoardMember {
   role: string;
   image: string;
   about: string;
+  insta: string;
+  linkedin: string;
 }
 
 const boardMembers: BoardMember[] = [
   {
     name: "Ishita Mohanta",
     role: "Chairperson",
+    insta: "https://www.instagram.com/ish.i.i.i",
     image: "/ishita-mohanta-no-lettering.png",
+    linkedin: "https://www.linkedin.com/in/ishita-mohanta-798350287/",
     about:
       "Smart, kind, and full of energy, Ishita is someone who lights up the room. Always open to conversations, she makes everyone feel welcome. Her dedication, hard work, and passion for EMBS shows in everything she does. She leads with both heart and purpose.",
   },
@@ -27,6 +26,8 @@ const boardMembers: BoardMember[] = [
     name: "Bhadra Sanjay Namboodiry",
     role: "Vice-Chairperson",
     image: "/bhadra-sanjay-namboodiry-no-lettering.png",
+    insta: "https://www.instagram.com/bhadrasanjayn",
+    linkedin: "https://www.linkedin.com/in/bhadra-sanjay-namboodiry-97aa7732b/",
     about:
       "With her clear and focused mind, she is ready to lead the chapter to even newer heights. While she posseses a calm demeanor, she is also quietly observant. When push comes to shove, she knows how to get everyone and everything back on track.",
   },
@@ -34,6 +35,8 @@ const boardMembers: BoardMember[] = [
     name: "Tanisha Choudhuri",
     role: "Secretary",
     image: "/tanisha-chaudhari-no-lettering.png",
+    insta: "https://www.instagram.com/choudhuritanisha",
+    linkedin: "https://www.linkedin.com/in/tanisha-choudhuri/",
     about:
       "A leader who takes charge of maintaining the chapter while bringing fun, energy, and personality along the way. Intelligent, graceful, with a pinch of sass, our Secretary is the perfect fit to lead, inspire, and evolve our chapter into something even greater.",
   },
@@ -41,6 +44,8 @@ const boardMembers: BoardMember[] = [
     name: "S Hashmitha",
     role: "Co-Secretary",
     image: "/hashmita-no-lettering.png",
+    insta: "https://www.instagram.com/hashmitha112358",
+    linkedin: "https://www.linkedin.com/in/hashmitha-sampathkumar/",
     about:
       "Our adorable/extremely kind/patient/always-there-for-everyone and amiable ball of sunshine! If you need a lending hand, she'll be the first one to help you. You can trust her to make sure things run smoothly no matter how hectic it could get.",
   },
@@ -48,6 +53,8 @@ const boardMembers: BoardMember[] = [
     name: "A Nethraa",
     role: "Finance Head",
     image: "/nethraa-no-lettering.png",
+    insta: "https://www.instagram.com/nethraa1218",
+    linkedin: "https://www.linkedin.com/in/nethraa-a-14b7aa320/",
     about:
       "Numbers and strategy, she runs the show,\nTraditional Tamil grace in the flow.\nFinance head with unmatched flair,\nFocused on accounts, phone? Barely there.",
   },
@@ -55,13 +62,17 @@ const boardMembers: BoardMember[] = [
     name: "P Daphne Christina Ruby",
     role: "Research Head",
     image: "/daphne-no-lettering.png",
+    insta: "https://www.instagram.com/_._daphnee_._",
+    linkedin: "https://www.linkedin.com/in/daphne-christina-ruby",
     about:
       "Collaborative, free spirited and full of quiet confidence. The driving force behind our technical prowess and expertise in biomedical science. She is dedicated to spearheading innovative projects and exploring new avenues.",
   },
   {
-    name: "Prithiksha Suresh Kumar",
+    name: "Prithiksa Suresh Kumar",
     role: "Design Head",
     image: "/pritiksha-no-lettering.png",
+    insta: "https://www.instagram.com/prithiksa_2007",
+    linkedin: "https://www.linkedin.com/in/prithiksa-suresh-kumar-56032628b/",
     about:
       "Fun at heart, sharp in vision. A beautiful blend of creativity with discipline. She might be easy to work with, however, she is uncompromising when it comes to quality. A mentor who pushes you to do better and design smarter.",
   },
@@ -69,6 +80,8 @@ const boardMembers: BoardMember[] = [
     name: "Haripriya Muni",
     role: "Public Relations Head",
     image: "/haripriya-no-lettering.png",
+    insta: "https://www.instagram.com/haripriyyya_",
+    linkedin: "https://www.linkedin.com/in/haripriyamuni/",
     about:
       "Jovial, fun-loving, always ready to strike up a conversation, she's a people magnet. When it comes to ideas, her brain runs like a full-speed fire engine, constantly beaming with creative sparks. She puts in her best effort to make sure our events reach everyone.",
   },
@@ -76,6 +89,8 @@ const boardMembers: BoardMember[] = [
     name: "Aryabrata Pattnaik",
     role: "Editorial Head",
     image: "/aryabrata-no-lettering.png",
+    insta: "https://www.instagram.com/brata.boi",
+    linkedin: "https://www.linkedin.com/in/aryabrata-pattnaik-0262a6240/",
     about:
       "A powerhouse of ideas, curiosity, and creative chaos. Always active and full of unexpected thoughts, he turns ideas into engaging blogs and articles, making him the most suitable person for this role.",
   },
@@ -83,6 +98,8 @@ const boardMembers: BoardMember[] = [
     name: "Pooja Priyadarshini",
     role: "HR Head",
     image: "/pooja-no-lettering.png",
+    insta: "https://www.instagram.com/snowy.7433",
+    linkedin: "https://www.linkedin.com/in/aryabrata-pattnaik-0262a6240/",
     about:
       "Soft-spoken, sharp-minded... and suddenly very loud about F1.\nSweet, smart, and a perfectionist at heart.\nBrains, beauty, and speed talk combined.",
   },
@@ -96,9 +113,6 @@ function IEEEEMBSLogo({
   style?: React.CSSProperties;
 }) {
   return (
-    // CHANGE 2: Added loading="lazy" and decoding="async".
-    // The logo image appears on every single card (front + back = 20 times on the page).
-    // Without lazy loading all instances were fetched immediately on page load.
     <img
       src="/embs-logo-transparent.png"
       alt="IEEE EMBS Logo"
@@ -130,9 +144,6 @@ function Avatar({
       }}
     >
       {image ? (
-        // CHANGE 3: Added loading="lazy" and decoding="async" to member photos.
-        // 10 board member photos all loading eagerly is a significant LCP hit since
-        // the board section is well below the fold.
         <img
           src={image}
           alt={`${name} photo`}
@@ -155,20 +166,13 @@ function LiquidMetalIDCard({
   role = "Role",
   image,
   about = "A dedicated member of the IEEE EMBS board.",
+  insta,
+  linkedin,
 }: BoardMember) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // CHANGE 4: Moved AudioContext and noise buffer setup into a useEffect with a ref.
-  // Original: created a new AudioContext lazily inside the click handler, then
-  // generated the entire noise buffer synchronously on the main thread on every flip
-  // (a for-loop of ~17,600 iterations at 44100Hz * 0.4s). This caused noticeable
-  // jank on click since it blocked JS execution before the flip animation could start.
-  //
-  // Fix: AudioContext is created once on mount. The noise buffer is also generated
-  // once and reused on every flip — we just create a new BufferSource (cheap) each
-  // time, which is the correct Web Audio API pattern.
   const audioContextRef = useRef<AudioContext | null>(null);
   const noiseBufferRef = useRef<AudioBuffer | null>(null);
 
@@ -194,8 +198,7 @@ function LiquidMetalIDCard({
     return () => clearTimeout(timeout);
   }, []);
 
-  // CHANGE 5: playFlipSound now reuses the pre-baked buffer instead of regenerating it.
-  // All the filter/gain node setup is unchanged — that part is cheap.
+ 
   const playFlipSound = useCallback(() => {
     const ctx = audioContextRef.current;
     const buffer = noiseBufferRef.current;
@@ -430,7 +433,6 @@ function LiquidMetalIDCard({
 
                   <Avatar name={name} image={image} className="relative w-28 h-28" />
                 </div>
-
                 <div className="min-w-0">
                   <div className="space-y-2 text-right">
                     <h2
@@ -455,7 +457,20 @@ function LiquidMetalIDCard({
               </div>
 
               <div className="flex items-end justify-between">
-                <div></div>
+                <div className="flex items-end justify-evenly gap-x-2">
+                  <img
+                    src="/insta-transparent.webp"
+                    alt="Instagram"
+                    className="w-5 h-5 opacity-50 mb-1 hover:opacity-100 cursor-pointer"
+                    onClick={() => insta && window.open(insta, "_blank")}
+                  />
+                  <img
+                    src="/linkedin-transparent.webp"
+                    alt="LinkedIN"
+                    className="w-7 h-7 opacity-60 hover:opacity-100 cursor-pointer"
+                    onClick={() => linkedin && window.open(linkedin, "_blank")}
+                  />
+                </div>
                 <motion.div
                   className="flex items-center justify-center"
                   animate={{ opacity: isHovered ? 1 : 0.7 }}
@@ -576,12 +591,6 @@ function LiquidMetalIDCard({
                   2025-26
                 </span>
               </div>
-
-              {/* CHANGE 11: Replaced motion.div that was animating to a static opacity
-                  with a plain div. Original had initial={{ opacity: 0.5 }} and
-                  animate={{ opacity: 0.5 }} — animating to the same value it starts at
-                  does nothing visually but still registers a motion element with the
-                  Framer Motion scheduler on every card. */}
               <div
                 className="absolute left-1/2"
                 style={{ bottom: "12px", transform: "translateX(-50%)", opacity: 0.5 }}
@@ -614,7 +623,7 @@ export default function BoardGrid() {
 
         <div className="relative z-10 text-center mb-2">
           <h1
-            className="text-6xl font-light tracking-wide text-white mb-2"
+            className="text-6xl font-serif font-semibold tracking-wide text-white mb-2"
             style={{ textShadow: "0 0 24px rgba(69,190,214,0.28)" }}
           >
             THE BOARD
@@ -646,6 +655,8 @@ export default function BoardGrid() {
               role={member.role}
               image={member.image}
               about={member.about}
+              insta={member.insta}
+              linkedin={member.linkedin}
             />
           ))}
         </div>

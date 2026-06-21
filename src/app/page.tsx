@@ -27,7 +27,7 @@ export default function Home() {
           <div className="container mx-auto px-4">
           <div className="relative z-10 text-center">
           <h1
-            className="text-6xl font-light tracking-wide text-white mb-2"
+            className="text-6xl font-semibold font-serif tracking-wide text-white mb-2"
             style={{ textShadow: "0 0 24px rgba(69,190,214,0.28)" }}
           >
             EVENT TIMELINE
@@ -65,7 +65,25 @@ export default function Home() {
         {/* Squad: Game */}
         <section id="game" className="py-20">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-black text-white uppercase mb-12">ECG Rhythm Game</h2>
+            <div className="relative z-10 mb-2 text-center">
+              <h1
+                className="text-6xl font-semibold font-serif tracking-wide text-white mb-2"
+                style={{ textShadow: "0 0 24px rgba(69,190,214,0.28)" }}
+              >
+                ECG PEAK GAME
+              </h1>
+              <p
+                className="text-sm uppercase"
+                style={{
+                  letterSpacing: "0.3em",
+                  background: "linear-gradient(90deg, #45bed6 0%, #f0c4da 45%, #d85897 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Try it out :)
+              </p>
+            </div>
             <EcgPeakGame />
           </div>
         </section>
